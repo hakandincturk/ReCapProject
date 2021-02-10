@@ -1,4 +1,5 @@
-﻿using DataAccess.Abstract;
+﻿using Core.DataAccess.EntityFramework;
+using DataAccess.Abstract;
 using Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,62 +10,9 @@ using System.Text;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfCarDal : ICarDal
+    public class EfCarDal : EfEntityRepositoryBase<Car, ReCapProjectContext>, ICarDal
     {
 
-        /*
-         * Car nesnesi gönderildiğinde veri tabanına ekler.
-         */
-        public void Add(Car entity)
-        {
-            using (ReCapProjectContext context = new ReCapProjectContext())
-            {
-                var addedEntity = context.Entry(entity);
-                addedEntity.State = EntityState.Added;
-                context.SaveChanges();
-                Console.WriteLine("----------- Araba Eklendi -----------");
-            }
-        }
-
-        //Gönderilen 'Car' nesnesini veri tabanından siler.
-        public void Delete(Car entity)
-        {
-            using (ReCapProjectContext context = new ReCapProjectContext())
-            {
-                var deletedEntity = context.Entry(entity);
-                deletedEntity.State = EntityState.Deleted;
-                context.SaveChanges();
-            }
-        }
-
-        //Gönderilen filtre ile 1 adet 'Car' nesnesi döndürür. 
-        public Car Get(Expression<Func<Car, bool>> filter)
-        {
-            using (ReCapProjectContext context = new ReCapProjectContext())
-            {
-                return context.Set<Car>().SingleOrDefault(filter);
-            }
-        }
-
-        //Gönderilen filtre ile birden fazla 'Car' nesnesi döndürür.
-        public List<Car> GetAll(Expression<Func<Car, bool>> filter = null)
-        {
-            using (ReCapProjectContext context = new ReCapProjectContext())
-            {
-                return filter == null ? context.Set<Car>().ToList() : context.Set<Car>().Where(filter).ToList();
-            }
-        }
-
-
-        //Gönderilen 'Car' nesnesini günceller.
-        public void Update(Car entity)
-        {
-            using (ReCapProjectContext context = new ReCapProjectContext())
-            {
-                var updatedEntity = context.Entry(entity);
-                updatedEntity.State = EntityState.Modified;
-                context.SaveChanges();
-            }
-        }
+        
     }
 }
